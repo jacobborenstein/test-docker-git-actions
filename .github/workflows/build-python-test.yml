@@ -3,8 +3,8 @@ name: Build and Push FastAPI Docker Image
 on:
   push:
     branches:
-      - master
-
+      - main
+#saaaa
 jobs:
   build:
     runs-on: ubuntu-latest
