@@ -24,7 +24,7 @@ jobs:
       with:
         context: ./python
         push: true
-        tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-fastapi:latest
+        tags: ghcr.io/${{ github.repository }}-fastapi:latest
 
     - name: Log out from GitHub Container Registry
       run: docker logout ghcr.io
