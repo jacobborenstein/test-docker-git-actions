@@ -1,22 +1,24 @@
-# For more information, please refer to https://aka.ms/vscode-docker-python
-FROM python:3-slim
+# Use an official Python runtime as a parent image
+FROM python:3.8-slim
 
-# Warning: A port below 1024 has been exposed. This requires the image to run as a root user which is not a best practice.
-# For more information, please refer to https://aka.ms/vscode-docker-python-user-rights`
-EXPOSE 80
-
-# Keeps Python from generating .pyc files in the container
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
-
-# Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
-# Install pip requirements
-COPY requirements.txt .
-RUN python -m pip install -r requirements.txt
-
+# Set the working directory in the container
 WORKDIR /app
+
+# Copy the contents of the python directory into the /app directory in the container
 COPY . /app
 
-# During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["gunicorn", "--bind", "0.0.0.0:80", "-k", "uvicorn.workers.UvicornWorker", "code/main:app"]
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# Set PYTHONPATH environment variable
+ENV PYTHONPATH=/app
+
+# Run code.main:app using Uvicorn with Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "-k", "uvicorn.workers.UvicornWorker", "code.main:app"]
